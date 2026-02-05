@@ -1,7 +1,7 @@
 // api/[...path].js
 import axios from 'axios';
 
-const BACKEND_URL = 'http://ec2-13-220-53-209.compute-1.amazonaws.com:8080';
+const BACKEND_URL = 'http://3.110.29.119:8080';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
