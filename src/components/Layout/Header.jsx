@@ -9,10 +9,11 @@ import {
   Settings,
   Menu,
   X,
-  MapPin  // ← ADD THIS IMPORT
+  MapPin,  // ← ADD THIS IMPORT
+  LogOut,
 } from 'lucide-react';
 
-const Header = ({ activeTab, setActiveTab }) => {
+const Header = ({ activeTab, setActiveTab, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const navigation = [
@@ -49,7 +50,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-1">
+          <nav className="hidden md:flex space-x-1 items-center">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -67,6 +68,13 @@ const Header = ({ activeTab, setActiveTab }) => {
                 </button>
               );
             })}
+            <button
+              onClick={onLogout}
+              className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 transition-colors duration-200 ml-2 border border-red-200"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </button>
           </nav>
 
           {/* Mobile menu button */}
@@ -101,6 +109,13 @@ const Header = ({ activeTab, setActiveTab }) => {
                   </button>
                 );
               })}
+              <button
+                onClick={onLogout}
+                className="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 transition-colors duration-200"
+              >
+                <LogOut className="h-4 w-4 mr-3" />
+                Logout
+              </button>
             </div>
           </div>
         )}
