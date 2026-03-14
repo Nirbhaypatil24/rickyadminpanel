@@ -9,6 +9,7 @@ import AutometerDashboard from './components/AutometerData/AutometerDashboard';
 import FareRateSettings from './components/Settings/FareRateSettings';
 import MapDashboard from './components/Maps/MapDashboard';  // ← ADD THIS IMPORT
 import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 
 const SESSION_KEY = 'adminSessionToken';
 
@@ -17,6 +18,7 @@ function App() {
     () => !!localStorage.getItem(SESSION_KEY)
   );
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showRegister, setShowRegister] = useState(false);
 
   const handleLogin = () => {
     const token = `session_${Date.now()}_${Math.random().toString(36).slice(2)}`;
@@ -30,8 +32,28 @@ function App() {
     setActiveTab('dashboard');
   };
 
+  const handleCreateAccount = () => {
+    setShowRegister(true);
+  };
+
+  const handleBackToLogin = () => {
+    setShowRegister(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    setShowRegister(false);
+  };
+
   if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
+    if (showRegister) {
+      return (
+        <Register 
+          onRegisterSuccess={handleRegisterSuccess} 
+          onBackToLogin={handleBackToLogin} 
+        />
+      );
+    }
+    return <Login onLogin={handleLogin} onCreateAccount={handleCreateAccount} />;
   }
 
   const renderActiveComponent = () => {

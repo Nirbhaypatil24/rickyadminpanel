@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Car, Lock, User, AlertCircle } from 'lucide-react';
+import { simpleHash, getRegisteredAccounts } from '../../utils/auth';
 
 const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, onCreateAccount }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,7 +17,21 @@ const Login = ({ onLogin }) => {
     setLoading(true);
 
     setTimeout(() => {
+      // Check default admin credentials
       if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        onLogin();
+        setLoading(false);
+        return;
+      }
+
+      // Check registered accounts (phone number as username)
+      const registeredAccounts = getRegisteredAccounts();
+      const passwordHash = simpleHash(password);
+      const matchedAccount = registeredAccounts.find(
+        account => account.phoneNumber === username && account.passwordHash === passwordHash && account.verified
+      );
+
+      if (matchedAccount) {
         onLogin();
       } else {
         setError('Invalid username or password. Please try again.');
@@ -104,6 +119,20 @@ const Login = ({ onLogin }) => {
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
+
+        {/* Create New Account */}
+        <div className="mt-6 text-center border-t pt-4">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={onCreateAccount}
+              className="text-blue-600 hover:text-blue-700 font-semibold"
+            >
+              Create New Account
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
